@@ -21,3 +21,5 @@ You can use Camera class in your project.
 Need to finish
 ## TODO
 Upload tested solution
+## References
+https://github.com/JetsonHacksNano/CSI-Camera
