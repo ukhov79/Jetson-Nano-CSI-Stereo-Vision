@@ -138,7 +138,7 @@ def main():
             height, width, channel = left_image.shape
 
             # Undistortion and Rectification part!
-            cv2.stereoRectify(cm1, dc1, cm2, dc2, (width, height), r[0], t, r1, r2, p1,
+            cv2.stereoRectify(cm1, dc1, cm2, dc2, (width, height), r, t, r1, r2, p1,
                               p2, q, alpha=-1, newImageSize=(0, 0))
             leftMapX, leftMapY = cv2.initUndistortRectifyMap(cm1, dc1, r1, p1, (width, height), cv2.CV_32FC1)
             left_image = cv2.remap(left_image, leftMapX, leftMapY, cv2.INTER_LINEAR, cv2.BORDER_CONSTANT)
