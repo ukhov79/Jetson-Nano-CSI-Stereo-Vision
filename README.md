@@ -26,3 +26,4 @@ Need to finish
 Upload tested solution
 ## References
 https://github.com/JetsonHacksNano/CSI-Camera
+https://github.com/aliyasineser/stereoDepth

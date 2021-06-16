@@ -19,14 +19,57 @@ nx, ny = 9, 6
 criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001)
 
 # prepare object points, like (0,0,0), (1,0,0), (2,0,0) ....,(6,5,0)
+# We use chessboard with 25mm square_size
 objp = np.zeros((ny * nx, 3), np.float32)
 objp[:, :2] = np.mgrid[0:nx, 0:ny].T.reshape(-1, 2)
+objp = objp * 0.025
 
 # Arrays to store object points and image points from all screens.
 objpointsl = []  # 3d point in real world space
 imgpointsl = []  # 2d points in image plane.
 objpointsr = []
 imgpointsr = []
+
+
+def depth_map(imgL, imgR):
+    """ Depth map calculation. Works with SGBM and WLS. Need rectified images, returns depth map ( left to right disparity ) """
+    # SGBM Parameters -----------------
+    window_size = 3  # wsize default 3; 5; 7 for SGBM reduced size image; 15 for SGBM full size image (1300px and above); 5 Works nicely
+
+    left_matcher = cv2.StereoSGBM_create(
+        minDisparity=-1,
+        numDisparities=5*16,  # max_disp has to be dividable by 16 f. E. HH 192, 256
+        blockSize=window_size,
+        P1=8 * 3 * window_size,
+        # wsize default 3; 5; 7 for SGBM reduced size image; 15 for SGBM full size image (1300px and above); 5 Works nicely
+        P2=32 * 3 * window_size,
+        disp12MaxDiff=12,
+        uniquenessRatio=10,
+        speckleWindowSize=50,
+        speckleRange=32,
+        preFilterCap=63,
+        mode=cv2.STEREO_SGBM_MODE_SGBM_3WAY
+    )
+    right_matcher = cv2.ximgproc.createRightMatcher(left_matcher)
+    # FILTER Parameters
+    lmbda = 80000
+    sigma = 1.3
+    visual_multiplier = 6
+
+    wls_filter = cv2.ximgproc.createDisparityWLSFilter(matcher_left=left_matcher)
+    wls_filter.setLambda(lmbda)
+
+    wls_filter.setSigmaColor(sigma)
+    displ = left_matcher.compute(imgL, imgR)  # .astype(np.float32)/16
+    dispr = right_matcher.compute(imgR, imgL)  # .astype(np.float32)/16
+    displ = np.int16(displ)
+    dispr = np.int16(dispr)
+    filteredImg = wls_filter.filter(displ, imgL, None, dispr)  # important to put "imgL" here!!!
+
+    filteredImg = cv2.normalize(src=filteredImg, dst=filteredImg, beta=0, alpha=255, norm_type=cv2.NORM_MINMAX);
+    filteredImg = np.uint8(filteredImg)
+
+    return filteredImg
 
 
 def main():
@@ -89,14 +132,22 @@ def main():
 
         # Save all calibration data into pickle format
         if keycode == ord('s') and i > 1:
+            height, width, channel = left_image.shape
             retval, cm1, dc1, cm2, dc2, r, t, e, f = cv2.stereoCalibrate(objpointsl, imgpointsl, imgpointsr,
-                                                                         (1280, 720), None, None, None, None)
+                                                                         (height, width), None, None, None, None)
+            print("Stereo calibration rms: ", retval)
+            r1, r2, p1, p2, q, roi_left, roi_right = cv2.stereoRectify(
+                cm1, dc1, cm2, dc2, (height, width), r, t,
+                flags=cv2.CALIB_ZERO_DISPARITY, alpha=0.9
+            )
+
             # Save the camera calibration results.
             calib_result_pickle = {
                 "retval": retval,
                 "cm1": cm1, "dc1": dc1,
                 "cm2": cm2, "dc2": dc2,
-                "r": r, "t": t, "e": e, "f": f
+                "r": r, "t": t, "e": e, "f": f,
+                "r1": r1, "r2": r2, "p1": p1, "p2": p2, "q": q
             }
 
             try:
@@ -107,7 +158,36 @@ def main():
 
         # View calibration result
         if keycode == ord('v'):
-            print("Unable to show Calibration results")
+            try:
+                calib_result_pickle = pickle.load(open("./camera/stereo_calib.p", "rb"))
+                cm1 = calib_result_pickle["cm1"]
+                cm2 = calib_result_pickle["cm2"]
+                dc1 = calib_result_pickle["dc1"]
+                dc2 = calib_result_pickle["dc2"]
+                r = calib_result_pickle["r"]
+                t = calib_result_pickle["t"]
+                r1 = calib_result_pickle["r1"]
+                p1 = calib_result_pickle["p1"]
+                r2 = calib_result_pickle["r2"]
+                p2 = calib_result_pickle["p2"]
+            except RuntimeError:
+                print("Unable to load Calibration coefficients")
+                break
+
+            # We use the shape for remap
+            height, width, channel = left_image.shape
+
+            # Undistortion and Rectification part!
+            leftMapX, leftMapY = cv2.initUndistortRectifyMap(cm1, dc1, r1, p1, (height, width), cv2.CV_32FC1)
+            left_image = cv2.remap(left_image, leftMapX, leftMapY, cv2.INTER_LINEAR, cv2.BORDER_CONSTANT)
+            rightMapX, rightMapY = cv2.initUndistortRectifyMap(cm2, dc2, r2, p2, (height, width), cv2.CV_32FC1)
+            right_image = cv2.remap(right_image, rightMapX, rightMapY, cv2.INTER_LINEAR, cv2.BORDER_CONSTANT)
+
+            # Convert to grayscale
+            grayl = cv2.cvtColor(left_image, cv2.COLOR_RGB2GRAY)
+            grayr = cv2.cvtColor(right_image, cv2.COLOR_RGB2GRAY)
+            # Get the disparity map into right image
+            right_image = depth_map(grayl, grayr)
 
         camera_images = np.hstack((left_image, right_image))
         cv2.imshow("IMX219-83 Stereo camera", camera_images)
