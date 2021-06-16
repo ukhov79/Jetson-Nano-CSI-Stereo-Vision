@@ -13,12 +13,13 @@ $ python3 start.py
 ```
 To start Calibration print chessboard .<br><br>
 <img src="./img/Calibration_ChessBoard_9x6.png" width="300" /><br>
-When you see the recognized chessboard (below) on the screen, press 'c' to add points into Calibration info.<br><br>
+When you see the recognized chessboard (below) on the screen, press 'c' to add points into Calibration info.
+You need to save about 30 shots of the chessboard. Then press 's' to save calibration results.<br><br>
 <img src="./img/Stereo_calibration_example.png" width="500" /><br><br>
-To view and save the calibration results press 'v'.<br>
-Tap Esc to exit programm.<br>
-The calibration data will be saved in /data directory using pickle format.<br>
-You can use Camera class in your project. 
+To view the calibration results press 'v'.<br>
+Tap Esc to exit program.<br>
+The calibration data will be saved in /camera directory using pickle format.<br>
+After Calibration process You can use Camera class in your projects. 
 ## Example
 Need to finish
 ## TODO
