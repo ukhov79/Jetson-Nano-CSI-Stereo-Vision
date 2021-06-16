@@ -11,11 +11,13 @@ $ git clone https://github.com/ukhov79/Jetson-Nano-CSI-Stereo-Vision
 $ cd Jetson-Nano-CSI-Stereo-Vision
 $ python3 start.py
 ```
-To start Calibration print chessboard and press 'c'.<br><br>
+To start Calibration print chessboard .<br><br>
 <img src="./img/Calibration_ChessBoard_9x6.png" width="300" /><br>
-To view the calibration results press 's'.<br>
+When you see the recognized chessboard (below) on the screen, press 'c' to add points into Calibration info.<br><br>
+<img src="./img/Stereo_calibration_example.png" width="500" /><br><br>
+To view and save the calibration results press 'v'.<br>
 Tap Esc to exit programm.<br>
-The calibration data will be saved in /data directory.<br>
+The calibration data will be saved in /data directory using pickle format.<br>
 You can use Camera class in your project. 
 ## Example
 Need to finish
