@@ -69,7 +69,7 @@ def main():
 
             # Add points into Calibration info when user press 'c'
             if keycode == ord('c'):
-                print("Add points from video capture (%d)/n" % i)
+                print("Add points from video capture (%d)" % i)
 
                 # Convert to grayscale
                 grayl = cv2.cvtColor(left_image, cv2.COLOR_RGB2GRAY)
@@ -101,8 +101,9 @@ def main():
 
             try:
                 pickle.dump(calib_result_pickle, open("./camera/stereo_calib.p", "wb"))
+                print("Calibration results saved\n")
             except RuntimeError:
-                print("Unable to save Calibration results")
+                print("Unable to save Calibration results\n")
 
         # View calibration result
         if keycode == ord('v'):
