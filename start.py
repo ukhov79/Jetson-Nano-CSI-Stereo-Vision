@@ -88,7 +88,7 @@ def main():
                 i += 1
 
         # Save all calibration data into pickle format
-        if keycode == ord('s') & i > 1:
+        if keycode == ord('s') and i > 1:
             retval, cm1, dc1, cm2, dc2, r, t, e, f = cv2.stereoCalibrate(objpointsl, imgpointsl, imgpointsr,
                                                                          (1280, 720), None, None, None, None)
             # Save the camera calibration results.
