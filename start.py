@@ -93,10 +93,10 @@ def main():
         if keycode == ord('s') and i > 1:
             height, width, channel = left_image.shape
             retval, cm1, dc1, cm2, dc2, r, t, e, f = cv2.stereoCalibrate(objpointsl, imgpointsl, imgpointsr,
-                                                                         (height, width), None, None, None, None)
+                                                                         (width, height), None, None, None, None)
             print("Stereo calibration rms: ", retval)
             r1, r2, p1, p2, q, roi_left, roi_right = cv2.stereoRectify(
-                cm1, dc1, cm2, dc2, (height, width), r, t,
+                cm1, dc1, cm2, dc2, (width, height), r, t,
                 flags=cv2.CALIB_ZERO_DISPARITY, alpha=0.9
             )
 
@@ -137,9 +137,9 @@ def main():
             height, width, channel = left_image.shape
 
             # Undistortion and Rectification part!
-            leftMapX, leftMapY = cv2.initUndistortRectifyMap(cm1, dc1, r1, p1, (height, width), cv2.CV_32FC1)
+            leftMapX, leftMapY = cv2.initUndistortRectifyMap(cm1, dc1, r1, p1, (width, height), cv2.CV_32FC1)
             left_image = cv2.remap(left_image, leftMapX, leftMapY, cv2.INTER_LINEAR, cv2.BORDER_CONSTANT)
-            rightMapX, rightMapY = cv2.initUndistortRectifyMap(cm2, dc2, r2, p2, (height, width), cv2.CV_32FC1)
+            rightMapX, rightMapY = cv2.initUndistortRectifyMap(cm2, dc2, r2, p2, (width, height), cv2.CV_32FC1)
             right_image = cv2.remap(right_image, rightMapX, rightMapY, cv2.INTER_LINEAR, cv2.BORDER_CONSTANT)
 
         camera_images = np.hstack((left_image, right_image))
