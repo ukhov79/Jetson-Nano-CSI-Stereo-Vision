@@ -21,7 +21,7 @@ criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001)
 # prepare object points, like (0,0,0), (1,0,0), (2,0,0) ....,(6,5,0)
 # We use chessboard with 25mm square_size
 objp = np.zeros((ny * nx, 3), np.float32)
-objp[:, :2] = np.mgrid[0:ny, 0:nx].T.reshape(-1, 2)
+objp[:, :2] = np.mgrid[0:nx, 0:ny].T.reshape(-1, 2)
 objp = objp * 0.025
 
 # Arrays to store object points and image points from all screens.
