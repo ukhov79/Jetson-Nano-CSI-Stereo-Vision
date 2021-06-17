@@ -41,9 +41,9 @@ class Camera:
         sensor_mode = 3
         capture_width = 1280
         capture_height = 720
-        display_width = 384
-        display_height = 216
-        framerate = 30
+        display_width = 640
+        display_height = 360
+        framerate = 20
         flip_method = 2
         gstreamer_pipeline_string = (
             "nvarguscamerasrc sensor-id=%d sensor-mode=%d ! "
