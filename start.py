@@ -96,7 +96,7 @@ def main():
             scflags = cv2.CALIB_FIX_INTRINSIC
             retval, cm1, dc1, cm2, dc2, r, t, e, f = cv2.stereoCalibrate(
                 objpointsl, imgpointsl, imgpointsr,
-                (width, height), criteria=sccriteria, flags=scflags
+                (width, height), None, None, None, None, criteria=sccriteria, flags=scflags
             )
             print("Stereo calibration rms: ", retval)
             r1, r2, p1, p2, q, roi_left, roi_right = cv2.stereoRectify(
