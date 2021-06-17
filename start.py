@@ -92,8 +92,10 @@ def main():
         # Save all calibration data into pickle format
         if keycode == ord('s') and i > 1:
             height, width, channel = left_image.shape
-            retval, cm1, dc1, cm2, dc2, r, t, e, f = cv2.stereoCalibrate(objpointsl, imgpointsl, imgpointsr,
-                                                                         (width, height), None, None, None, None)
+            retval, cm1, dc1, cm2, dc2, r, t, e, f = cv2.stereoCalibrate(
+                objpointsl, imgpointsl, imgpointsr,
+                (width, height), None, None, None, None, None, None
+            )
             print("Stereo calibration rms: ", retval)
             r1, r2, p1, p2, q, roi_left, roi_right = cv2.stereoRectify(
                 cm1, dc1, cm2, dc2, (width, height), r, t,

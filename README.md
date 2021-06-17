@@ -11,7 +11,7 @@ $ git clone https://github.com/ukhov79/Jetson-Nano-CSI-Stereo-Vision
 $ cd Jetson-Nano-CSI-Stereo-Vision
 $ python3 start.py
 ```
-To start Calibration print chessboard .<br><br>
+To start Calibration print chessboard as is (square size 25mm).<br><br>
 <img src="./img/Calibration_ChessBoard_9x6.png" width="300" /><br>
 When you see the recognized chessboard (below) on the screen,
 press 'c' to add points into Calibration info.
@@ -26,9 +26,9 @@ The calibration data will be saved in /camera directory using pickle format.<br>
 After Calibration process You can use Camera class in your projects. 
 ## Example
 First results of Stereo calibration with high Rms. Rms = 54%<br>
-<img src="./img/Stereocalibration_with_high_rms.png" width="300" /><br>
+<img src="./img/Stereocalibration_with_high_rms.png" width="500" /><br>
 ## TODO
-1. Change parameters to have good results.
+1. Change Calibration process and parameters to have good results (find coeffs separately for L and R cams, use remap).
 2. Add methods into camera class.
 3. Correct switch between original and calibrate image.
 ## References
