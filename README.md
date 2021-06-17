@@ -13,17 +13,23 @@ $ python3 start.py
 ```
 To start Calibration print chessboard .<br><br>
 <img src="./img/Calibration_ChessBoard_9x6.png" width="300" /><br>
-When you see the recognized chessboard (below) on the screen, press 'c' to add points into Calibration info.
-You need to save about 30 shots of the chessboard. Then press 's' to save calibration results.<br><br>
+When you see the recognized chessboard (below) on the screen,
+press 'c' to add points into Calibration info.
+Be careful with order of the chessboard corners.
+Colors must be in the same order on the left and right cameras.
+You need to save about 20 shots of the chessboard.
+Then press 's' to save calibration results.<br><br>
 <img src="./img/Stereo_calibration_example.png" width="500" /><br><br>
-To view the calibration results press 'v'.<br>
+Press "v" to switch between original and calibrated image.<br>
 Tap Esc to exit program.<br>
 The calibration data will be saved in /camera directory using pickle format.<br>
 After Calibration process You can use Camera class in your projects. 
 ## Example
-Need to finish
+First results of Stereo calibration with high Rms. Rms = 54%<br>
+<img src="./img/Stereocalibration_with_high_rms.png" width="300" /><br>
 ## TODO
-Upload tested solution
+1. Change parameters to have good results.
+2. Add methods into camera class.
+3. Correct switch between original and calibrate image.
 ## References
 https://github.com/JetsonHacksNano/CSI-Camera
-https://github.com/aliyasineser/stereoDepth
