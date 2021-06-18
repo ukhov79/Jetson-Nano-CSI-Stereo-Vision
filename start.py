@@ -21,14 +21,13 @@ criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001)
 # prepare object points, like (0,0,0), (1,0,0), (2,0,0) ....,(6,5,0)
 # We use chessboard with 25mm square_size
 objp = np.zeros((ny * nx, 3), np.float32)
-objp[:, :2] = np.mgrid[0:nx, 0:ny].T.reshape(-1, 2)
+objp[:, :2] = np.mgrid[0:ny, 0:nx].T.reshape(-1, 2)
 objp = objp * 0.025
 
 # Arrays to store object points and image points from all screens.
-objpointsl = []  # 3d point in real world space
-imgpointsl = []  # 2d points in image plane.
-objpointsr = []
-imgpointsr = []
+objpoints = []   # 3d point in real world space
+imgpointsl = []  # 2d points in image plane for left camera
+imgpointsr = []  # 2d points in image plane for tight camera
 
 
 def main():
@@ -65,7 +64,7 @@ def main():
 
         # If found corners, draw corners and check to add Calibration info
         if retl is True & retr is True:
-            # Draw and display the corners
+            # Draw the corners
             cv2.drawChessboardCorners(left_image, (nx, ny), cornersl, retl)
             cv2.drawChessboardCorners(right_image, (nx, ny), cornersr, retr)
 
@@ -78,12 +77,11 @@ def main():
                 grayr = cv2.cvtColor(right_image, cv2.COLOR_RGB2GRAY)
 
                 # Add left points
-                objpointsl.append(objp)
+                objpoints.append(objp)
                 cv2.cornerSubPix(grayl, cornersl, (11, 11), (-1, -1), criteria)
                 imgpointsl.append(cornersl)
 
                 # Add right points
-                objpointsr.append(objp)
                 cv2.cornerSubPix(grayr, cornersr, (11, 11), (-1, -1), criteria)
                 imgpointsr.append(cornersr)
 
@@ -95,7 +93,7 @@ def main():
             sccriteria = (cv2.TERM_CRITERIA_MAX_ITER + cv2.TERM_CRITERIA_EPS, 100, 1e-5)
             scflags = cv2.CALIB_FIX_INTRINSIC
             retval, cm1, dc1, cm2, dc2, r, t, e, f = cv2.stereoCalibrate(
-                objpointsl, imgpointsl, imgpointsr,
+                objpoints, imgpointsl, imgpointsr,
                 (width, height), None, None, None, None, criteria=sccriteria, flags=scflags
             )
             print("Stereo calibration rms: ", retval)
