@@ -43,6 +43,8 @@ def main():
 
     # Iteration ratio
     i = 1
+    # Undistortion
+    und = False
 
     cv2.namedWindow("IMX219-83 Stereo camera", cv2.WINDOW_AUTOSIZE)
 
@@ -90,10 +92,9 @@ def main():
         # Save all calibration data into pickle format
         if keycode == ord('s') and i > 1:
             height, width, channel = left_image.shape
-            sccriteria = (cv2.TERM_CRITERIA_MAX_ITER + cv2.TERM_CRITERIA_EPS, 30, 0.001)
             retval, cm1, dc1, cm2, dc2, r, t, e, f = cv2.stereoCalibrate(
                 objpoints, imgpointsl, imgpointsr,
-                (width, height), None, None, None, None, criteria=sccriteria
+                (width, height), None, None, None, None, criteria=criteria
             )
             print("Stereo calibration rms: ", retval)
             r1, r2, p1, p2, q, roi_left, roi_right = cv2.stereoRectify(
@@ -131,6 +132,7 @@ def main():
                 r2 = calib_result_pickle["r2"]
                 p2 = calib_result_pickle["p2"]
                 q = calib_result_pickle["q"]
+                und = not und
             except RuntimeError:
                 print("Unable to load Calibration coefficients")
                 break
@@ -138,13 +140,12 @@ def main():
             # We use the shape for remap
             height, width, channel = left_image.shape
 
-            # Undistortion and Rectification part!
-            cv2.stereoRectify(cm1, dc1, cm2, dc2, (width, height), r, t, r1, r2, p1,
-                              p2, q, alpha=-1, flags=0)
-            leftMapX, leftMapY = cv2.initUndistortRectifyMap(cm1, dc1, r1, p1, (width, height), cv2.CV_32FC1)
-            left_image = cv2.remap(left_image, leftMapX, leftMapY, cv2.INTER_LINEAR, cv2.BORDER_CONSTANT)
-            rightMapX, rightMapY = cv2.initUndistortRectifyMap(cm2, dc2, r2, p2, (width, height), cv2.CV_32FC1)
-            right_image = cv2.remap(right_image, rightMapX, rightMapY, cv2.INTER_LINEAR, cv2.BORDER_CONSTANT)
+        # Undistortion and Rectification part!
+        if und is True:
+            leftMapx, leftMapy = cv2.initUndistortRectifyMap(cm1, dc1, r1, p1, (width, height), cv2.CV_32FC1)
+            left_image = cv2.remap(left_image, leftMapx, leftMapy, cv2.INTER_LINEAR, cv2.BORDER_CONSTANT)
+            rightMapx, rightMapy = cv2.initUndistortRectifyMap(cm2, dc2, r2, p2, (width, height), cv2.CV_32FC1)
+            right_image = cv2.remap(right_image, rightMapx, rightMapy, cv2.INTER_LINEAR, cv2.BORDER_CONSTANT)
 
         camera_images = np.hstack((left_image, right_image))
         cv2.imshow("IMX219-83 Stereo camera", camera_images)
