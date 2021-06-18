@@ -17,7 +17,8 @@ When you see the recognized chessboard (below) on the screen,
 press 'c' to add points into Calibration info.
 Be careful with order of the chessboard corners.
 Colors must be in the same order on the left and right cameras.
-You need to save about 20 shots of the chessboard.
+You need to save about 50 shots of the chessboard in different positions on the screen
+and with different rotations.
 Then press 's' to save calibration results.<br><br>
 <img src="./img/Stereo_calibration_example.png" width="500" /><br><br>
 Press "v" to switch between original and calibrated image.<br>
@@ -27,8 +28,12 @@ After Calibration process You can use Camera class in your projects.
 ## Example
 First results of Stereo calibration with high Rms. Rms = 54%<br>
 <img src="./img/Stereocalibration_with_high_rms.png" width="500" /><br>
+After fixing calibration errors and bugs at 7% rms<br>
+<img src="./img/tereo_calibration_example_rms_7p.png" width="500" /><br>
 ## TODO
-1. Change Calibration process and parameters to have good results (find coeffs separately for L and R cams, use remap).
-2. Add methods into camera class.
+1. Change and make faster Calibration and display process (use remap).
+2. Add parameters to have good results (find coeffs separately for L and R cams).
+Play around with stereo calibration flags and parameters.
+3. Add methods into camera class.
 ## References
 https://github.com/JetsonHacksNano/CSI-Camera
