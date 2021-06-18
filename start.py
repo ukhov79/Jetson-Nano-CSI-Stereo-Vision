@@ -16,7 +16,7 @@ from camera.camera import Camera
 nx, ny = 9, 6
 
 # termination criteria
-criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001)
+criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 100, 0.001)
 
 # prepare object points, like (0,0,0), (1,0,0), (2,0,0) ....,(6,5,0)
 # We use chessboard with 25mm square_size
@@ -46,7 +46,7 @@ def main():
     # Undistortion
     und = False
 
-    cv2.namedWindow("IMX219-83 Stereo camera", cv2.WINDOW_AUTOSIZE)
+    cv2.namedWindow("IMX219-83 Stereo camera", cv2.WINDOW_NORMAL)
 
     while cv2.getWindowProperty("IMX219-83 Stereo camera", 0) >= 0:
 

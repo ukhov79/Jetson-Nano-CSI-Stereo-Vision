@@ -30,6 +30,5 @@ First results of Stereo calibration with high Rms. Rms = 54%<br>
 ## TODO
 1. Change Calibration process and parameters to have good results (find coeffs separately for L and R cams, use remap).
 2. Add methods into camera class.
-3. Correct switch between original and calibrate image.
 ## References
 https://github.com/JetsonHacksNano/CSI-Camera
