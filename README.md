@@ -29,7 +29,7 @@ After Calibration process You can use Camera class in your projects.
 First results of Stereo calibration with high Rms. Rms = 54%<br>
 <img src="./img/Stereocalibration_with_high_rms.png" width="500" /><br>
 After fixing calibration errors and bugs at 7% rms<br>
-<img src="./img/tereo_calibration_example_rms_7p.png" width="500" /><br>
+<img src="./img/Stereo_calibration_example_rms_7p.png" width="500" /><br>
 ## TODO
 1. Change and make faster Calibration and display process (use remap).
 2. Add parameters to have good results (find coeffs separately for L and R cams).
