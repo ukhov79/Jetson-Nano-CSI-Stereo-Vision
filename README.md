@@ -9,7 +9,7 @@ Clone this repository and run start.py. If you connected everything as in the ph
 ```
 $ git clone https://github.com/ukhov79/Jetson-Nano-CSI-Stereo-Vision
 $ cd Jetson-Nano-CSI-Stereo-Vision
-$ python3 start.py
+$ sudo python3 start.py
 ```
 To start Calibration print chessboard as is (square size 25mm).<br><br>
 <img src="./img/Calibration_ChessBoard_9x6.png" width="300" /><br>
